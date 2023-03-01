@@ -39,17 +39,17 @@
 
 <body>
 
-<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2018</h1>
+<h1 align="middle">CS 184: Computer Graphics and Imaging, Spring 2023</h1>
 <h1 align="middle">Project 2: Mesh Edit</h1>
-<h2 align="middle">YOUR NAME</h2>
+<h2 align="middle">Patrick Cui</h2>
 
 <br><br>
 
-<div>
+<br>
 
 <h2 align="middle">Overview</h2>
 <p>
-    YOUR RESPONSE GOES HERE
+  Overall, this project enabled me to process triangle meshes and represent objects in 3D, which is integral to how computers are able to redner scenes that mimic the real life. In project 2, I was able to write the algorithm that calculates a Bezier curve, and in turn use that algorithm to cacluatle Bezier surfaces. Specifcially, I implemented the de Casteljau algorithm, which computes a point on the curve by repeatedly using a given input, t, to create intermediate points until we converged to a point on a curve. Then, I was able to enable smooth material shading on a mesh by calculating the area-weighted normals from a vertex which is used within Phong shading. Finally, I was able to implement operations with the half-edge data structure while traversing triangle meshes, including edge flip and edge splittig. Using edge flip and edge splitting, I was then able to perform upscaling by loop subdivion. 
 </p>
 <br>
 
@@ -63,7 +63,7 @@
   Briefly explain de Casteljau's algorithm and how you implemented it in order to evaluate Bezier curves.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+  De Casteljau’s algorithm is a recursive process that computes a singular point on a curve specified by a set of given control points. The algorithm computes a point along the line between two successive control points whose exact position along the line segment is specified by a ratio parameter between 0 and 1. This process repeats until there is only one point left, which is guaranteed to be a point along the curve. By iterating the ratio parameter from 0 to 1, we can trace out the entire curve. In my implementation of computing one level subdivision, I looped through the provided control points vector and computed the intermediate point given by (1-t)*(location of first point) + t*(location of second point).
 </p>
 <br>
 
@@ -71,9 +71,9 @@
 <b>
   Take a look at the provided .bzc files and create your own Bezier curve with 6 control points of your choosing. Use this Bezier curve for your screenshots below.
 </b>
-<p>
+<!-- <p>
     YOUR RESPONSE GOES HERE
-</p>
+</p> -->
 <!-- Example of including a single figure -->
 <div align="middle">
   <img src="images/your_file.png" align="middle" width="50%">
@@ -88,30 +88,34 @@
   <table style="width:100%">
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/1.1.png" align="middle" width="400px"/>
         <figcaption>Level 0</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/1.2.png" align="middle" width="400px"/>
         <figcaption>Level 1</figcaption>
       </td>
     </tr>
     <br>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/1.3.png" align="middle" width="400px"/>
         <figcaption>Level 2</figcaption>
       </td>
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/1.4.png" align="middle" width="400px"/>
         <figcaption>Level 3</figcaption>
       </td>
     </tr>
     <br>
     <tr align="center">
       <td>
-        <img src="images/your_file.png" align="middle" width="400px"/>
+        <img src="images/1.5.png" align="middle" width="400px"/>
         <figcaption>Level 4</figcaption>
+      </td>
+      <td>
+        <img src="images/1.6.png" align="middle" width="400px"/>
+        <figcaption>Level 5</figcaption>
       </td>
     </tr>
   </table>
@@ -122,18 +126,16 @@
 <b>
   Show a screenshot of a slightly different Bezier curve by moving the original control points around and modifying the parameter \(t\) via mouse scrolling.
 </b>
-<p>
-    YOUR RESPONSE GOES HERE
-</p>  
 <br>
 
+<img src="images/1.7.png" align="middle" width="1000px"/>
 
 <h3 align="middle">Part 2: Bezier Surfaces with Separable 1D de Casteljau</h3>
 <b>
   Briefly explain how de Casteljau algorithm extends to Bezier surfaces and how you implemented it in order to evaluate Bezier surfaces.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+  The de Casteljau algorithm for evaluating Bezier surfaces essentially computes a Bezier curve twice for each given point (u, v). We are given a 2D grid of control points, and we treat each row of the 2D grid as a set of control points for a Bezier curve. For each curve, we compute a point on that curve using the parameter u. Then, suppose there are n rows in the grid provided, we use the n points along all the bezier curves as control points to calculate the final point on the Bezier surface using the parameter v. In my implementation, the overall algorithm described above is reflected in the evaluate() method. Specifically, the evaluate1D method computes each individual point defined by rows using a recursive approach, and evaluateStep computes the next subdivision for a given set of control points.
 </p>
 <br>
 
@@ -141,10 +143,9 @@
 <b>
   Show a screenshot of bez/teapot.bez (not .dae) evaluated by your implementation.
 </b>
-<p>
-    YOUR RESPONSE GOES HERE
-</p>
 <br>
+
+<img src="images/2.1.png" align="middle" width="1000px"/>
 
 
 <h2 align="middle">Section II: Triangle Meshes and Half-Edge Data Structure</h2>
@@ -155,7 +156,7 @@
   Briefly explain how you implemented the area-weighted vertex normals.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+  To implement area-weighted vertex normals, I started off by looping through every face incident to the vertex, not literally but figuratively. Specifically, to compute the area-weighted normal of a specific face, I only need the 3 vertices of the given triangle. Therefore, I looped through all edges on the triangle to obtain every vertex. Then, I took the cross product of 2 edges to obtain the surface normal, whose magnitude is also proportional to the area of its associated triangle. Finally, I added up all the surface normal vectors and then normalized to obtain the final result. 
 </p>
 <br>
 
@@ -163,10 +164,10 @@
 <b>
   Show screenshots of dae/teapot.dae (not .bez) comparing teapot shading with and without vertex normals. Use <kbd>Q</kbd> to toggle default flat shading and Phong shading.
 </b>
-<p>
-    YOUR RESPONSE GOES HERE
-</p>
 <br>
+
+<img src="images/3.1.png" align="middle" width="1000px"/>
+<img src="images/3.2.png" align="middle" width="1000px"/>
 
 
 <h3 align="middle">Part 4: Edge Flip</h3>
@@ -174,7 +175,7 @@
   Briefly explain how you implemented the edge flip operation and describe any interesting implementation / debugging tricks you have used.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+  For the edge flip, I referenced the CMU Guide to Implementing Edge Operations <a href="http://15462.courses.cs.cmu.edu/fall2015content/misc/HalfedgeEdgeOpImplementationGuide.pdf", target="about/blank">(Link)</a>. First, I drew a diagram of the local mesh involving the provided edge and the two triangles and labeled every single element according to the half-edge data structure (half edges, vertices, edges, faces) before and after the edge flip. After ensuring that my diagram was correct, I implemented the method by first declaring variables that were identical to the diagram labels – in other words, “collecting” all the elements. Then, I compared the before and after states of the diagram and observed which elements had references that changed. After identifying these elements, I updated the references and pointers accordingly. I was able to implement the method correctly on the first try, so I did not spend any time debugging this particular method. 
 </p>
 <br>
 
@@ -182,18 +183,18 @@
 <b>
   Show screenshots of the teapot before and after some edge flips.
 </b>
-<p>
-    YOUR RESPONSE GOES HERE
-</p>
 <br>
 
+<img src="images/4.1.png" align="middle" width="1000px"/>
+<img src="images/4.2.png" align="middle" width="1000px"/>
 
-<b>
+
+<!-- <b>
     Write about your eventful debugging journey, if you have experienced one.
 </b>
 <p>
     YOUR RESPONSE GOES HERE
-</p>
+</p> -->
 <br>
 
 
@@ -202,7 +203,8 @@
   Briefly explain how you implemented the edge split operation and describe any interesting implementation / debugging tricks you have used.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+  For me, the most important step of implementing the edge split operation was to draw a diagram of the local mesh involving the given edge and labeling every single mesh element. After performing the split on the diagram, I carefully labeled the newly-created mesh elements while keeping the existing mesh elements as close as they were to their original orientation in order to have less pointer re-assignments in code. In my implementation, I declared a variable for every element from the original local mesh as well as every element created by the split operation. Then, based on the diagram, I re-assigned every pointer that would be modified for every mesh element. Similar to the previous part, I was able to correctly implement the split operation on the first try thanks to the detailed diagram. 
+
 </p>
 <br>
 
@@ -210,21 +212,24 @@
 <b>
     Show screenshots of a mesh before and after some edge splits. 
 </b>
-<p>
-    YOUR RESPONSE GOES HERE
-</p>
-<br>
+
+
+<img src="images/5.1.png" align="middle" width="1000px"/>
+<img src="images/5.2.png" align="middle" width="1000px"/>
 
 
 <b>
     Show screenshots of a mesh before and after a combination of both edge splits and edge flips.
 </b>
-<p>
-    YOUR RESPONSE GOES HERE
-</p>
 <br>
 
 
+<img src="images/5.3.png" align="middle" width="1000px"/>
+<img src="images/5.4.png" align="middle" width="1000px"/>
+
+
+
+<!-- 
 <b>
     Write about your eventful debugging journey, if you have experienced one.
 </b>
@@ -240,7 +245,7 @@
 <p>
     YOUR RESPONSE GOES HERE
 </p>
-<br>
+<br> -->
 
 
 <h3 align="middle">Part 6: Loop Subdivision for Mesh Upsampling</h3>
@@ -248,7 +253,10 @@
   Briefly explain how you implemented the loop subdivision and describe any interesting implementation / debugging tricks you have used.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+  For the implementation of loop subdivision, I followed the suggested steps outlined in the project spec. First, I computed the positions of every vertex in the original mesh as well as every new vertex that an edge split operation will create (i.e. calculating new vertex positions as weighted average of the neighbors). Then, I performed a split operation on every original edge in the mesh before flipping every newly created edge that connects an old vertex to a new vertex. Finally, since the updated vertex positions were stored in a temporary instance variable, I copied that temporary value and passed it into the actual position variable in order to reflect the new changes. 
+</p>
+<p>
+  At first, my mesh was not subdividing correctly. The first issue I realized I had was that when I printed out the updated vertex positions, I was seeing all 0’s. Upon checking Ed, I realized that I needed to perform all calculations in float instead of in int – since divisions were being rounded down to 0. Then, I realized that during my flip operation, I only checked if an edge connected a new and old vertex but did not account for whether the edge was a new edge. After looking over the overall steps of my implementation, I decided that the best way to flag the isNew to true is to do so in the splitEdge() method itself right as the new edges were created. After doing so, my implementation worked like a charm. 
 </p>
 <br>
 
@@ -257,20 +265,44 @@
   Take some notes, as well as some screenshots, of your observations on how meshes behave after loop subdivision. What happens to sharp corners and edges? Can you reduce this effect by pre-splitting some edges?
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+  After loop subdivision, some meshes are upscaled / show higher definition, while some others basic geometric meshes converge towards a more spherical appearance. 
+</p>
+<p>
+  In the case of sharp corners and edges, as seen by the screenshots, all the shapes that had those sharp features lost those particular features – therefore, if it is our intention to preserve some sharp edges or corners, we cannot do so. 
+</p>
+
+<img src="images/6.1.png" align="middle" width="1000px"/>
+<img src="images/6.2.png" align="middle" width="1000px"/>
+<br>
+<img src="images/6.3.png" align="middle" width="1000px"/>
+<img src="images/6.4.png" align="middle" width="1000px"/>
+
+<p>
+  However, if we pre-split the edges around the corner or edge we are interested in, we can somewhat preserve the sharper features of the original mesh after several iterations of subdivisions. As shown below, one vertex of the icosahedron was pre-split a few times, which increased the degree on its vertex. We can see that that particular vertex as well as the sharp edges around them converged to a sphere at a slower rate than the rest of the mesh. 
 </p>
 <br>
 
+<img src="images/6.8.png" align="middle" width="1000px"/>
+
+<br><br>
 
 <b>
   Load dae/cube.dae. Perform several iterations of loop subdivision on the cube. Notice that the cube becomes slightly asymmetric after repeated subdivisions. Can you pre-process the cube with edge flips and splits so that the cube subdivides symmetrically? Document these effects and explain why they occur. Also explain how your pre-processing helps alleviate the effects.
 </b>
 <p>
-    YOUR RESPONSE GOES HERE
+  As mentioned from the previous part, the degree of the vertex can affect the rate in which that particular part of the mesh smoothes out. Observing the cube mesh, we see that some vertices have degree 4, while others have degree 5 (shown below).
 </p>
 <br>
+<img src="images/6.5.png" align="middle" width="1000px"/>
+<img src="images/6.6.png" align="middle" width="1000px"/>
+<p>
+  So, when the loop subdivision is performed on the mesh, the degree of the vertex affects how the new vertex position is calculated (specifically, the factor n and u, which is based on the vertex degree). Therefore, to make the cube symmetrical, we just need to perform splits on the edges in a way that ensures all vertices have the same degree. After doing so, we notice that the cube becomes symmetrical after several iterations of loop subdivision.  
 
+</p>
 
+<img src="images/6.7.png" align="middle" width="1000px"/>
+
+<!-- 
 <b>
     If you have implemented any extra credit extensions, explain what you did and document how they work with screenshots.
 </b>
@@ -305,7 +337,7 @@
 <p>
     YOUR RESPONSE GOES HERE
 </p>
-<br>
+<br> -->
 
 
 </body>
